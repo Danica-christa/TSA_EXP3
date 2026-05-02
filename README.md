@@ -1,5 +1,5 @@
 # Ex.No: 03   COMPUTE THE AUTO FUNCTION(ACF)
-Date: 
+Date: 2/5/26
 
 ### AIM:
 To Compute the AutoCorrelation Function (ACF) of the data for the first 35 lags to determine the model
@@ -11,33 +11,49 @@ type to fit the data.
 4. Store the results in an array
 5. Represent the result in graphical representation as given below.
 ### PROGRAM:
+```
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
-import numpy as np
+# Load dataset
+df = pd.read_csv('NFLX.csv')
 
-data = [3, 16, 156, 47, 246, 176, 233, 140, 130,
-101, 166, 201, 200, 116, 118, 247,
-209, 52, 153, 232, 128, 27, 192, 168, 208,
-187, 228, 86, 30, 151, 18, 254,
-76, 112, 67, 244, 179, 150, 89, 49, 83, 147, 90,
-33, 6, 158, 80, 35, 186, 127]
+# Store OPEN values in 'data'
+data = df['Open'].values
 
+# Parameters
+N = len(data)
 lags = range(35)
 
+autocorr_values = []
 
-#Pre-allocate autocorrelation table
+mean_data = np.mean(data)
+variance_data = np.var(data)
 
-#Mean
+# ACF calculation
+for lag in lags:
+    if lag == 0:
+        autocorr_values.append(1)
+    else:
+        auto_cov = np.sum((data[:-lag] - mean_data) * (data[lag:] - mean_data)) / N
+        autocorr_values.append(auto_cov / variance_data)
 
-#Variance
+# Plot
+plt.figure(figsize=(10, 6))
+plt.stem(lags, autocorr_values)
 
-#Normalized data
+plt.title('Autocorrelation of Open Values')
+plt.xlabel('Lag')
+plt.ylabel('Autocorrelation')
 
-#Go through lag components one-by-one
-
-#display the graph
-
+plt.grid(True)
+plt.show()
+```
 ### OUTPUT:
 
+<img width="1124" height="673" alt="image" src="https://github.com/user-attachments/assets/5f75e237-09d9-4218-9b8c-1161ae04a122" />
+
+
 ### RESULT:
-        Thus we have successfully implemented the auto correlation function in python.
+Thus we have successfully implemented the auto correlation function in python.
